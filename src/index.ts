@@ -4,6 +4,7 @@ import { exec } from "child_process"
 
 import { config } from "dotenv";
 import { Configuration, OpenAIApi } from "openai"
+import AgentWithChatHistory from "./AgentWithChatHistory/index.js";
 
 const projectDir = "/Users/linusbolls/projects/test"
 
@@ -115,7 +116,7 @@ async function enactPrompt(prompt: string) {
 
                 break;
 
-                
+
 
             case "append":
 
@@ -203,4 +204,27 @@ exec: tsc --init
 exec: tsc
 exec: node src/index.js`
 
-enactPrompt(test2)
+// enactPrompt(test2)
+
+async function dings() {
+
+    const history = [
+        { by: "USER" as const, body: prompt },
+        { by: "AGENT" as const, body: "mkdir tic-tac-toe && cd tic-tac-toe" },
+    ]
+    const sache = new AgentWithChatHistory(history)
+
+    await sache.init()
+
+    // "<no output>"
+    console.log(await sache.call("give me the next command"))
+
+    console.log(await sache.call("give me the next command"))
+
+    console.log(await sache.call("give me the next command"))
+
+    console.log(await sache.call("give me the next command"))
+
+    console.log(await sache.call("give me the next command"))
+}
+dings()
